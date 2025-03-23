@@ -5,13 +5,13 @@
     "title": "FORM XIV - APPLICATION FOR REGISTRATION OF COPYRIGHT [SEE RULE 70]",
     "description": "\n    FORM XIV - APPLICATION FOR REGISTRATION OF COPYRIGHT\n    For applying to the Registrar of Copyrights, Copyright Office, New Delhi\n    for registration of copyright in accordance with section 45 of the Copyright Act, 1957 (14 of 1957).\n  ",
     "metadata": {
-      "createdAt": "2025-03-23T04:01:54.727Z",
-      "updatedAt": "2025-03-23T04:01:54.727Z"
+      "createdAt": "2025-03-23T07:44:42.225Z",
+      "updatedAt": "2025-03-23T07:44:42.225Z"
     },
     "fields": [
       {
         "id": 1,
-        "label": "Applicant Name",
+        "label": "name",
         "description": "Full name of the applicant",
         "type": "TEXT",
         "required": true,
@@ -20,7 +20,7 @@
       },
       {
         "id": 2,
-        "label": "Applicant Address",
+        "label": "address",
         "description": "Complete address of the applicant",
         "type": "TEXTAREA",
         "required": true,
@@ -29,7 +29,7 @@
       },
       {
         "id": 3,
-        "label": "Applicant Nationality",
+        "label": "nationality",
         "description": "Nationality of the applicant",
         "type": "TEXT",
         "required": true,
@@ -38,7 +38,7 @@
       },
       {
         "id": 4,
-        "label": "Applicant Category",
+        "label": "category",
         "description": "Category of the applicant",
         "type": "SELECT",
         "required": true,
@@ -47,7 +47,7 @@
       },
       {
         "id": 5,
-        "label": "Work Title",
+        "label": "work_title",
         "description": "Title of the work for copyright registration",
         "type": "TEXT",
         "required": true,
@@ -56,7 +56,7 @@
       },
       {
         "id": 6,
-        "label": "Work Description",
+        "label": "work_description",
         "description": "Description of the work",
         "type": "TEXTAREA",
         "required": true,
@@ -65,7 +65,7 @@
       },
       {
         "id": 7,
-        "label": "Work Class",
+        "label": "work_class",
         "description": "Class of the work",
         "type": "SELECT",
         "required": true,
@@ -84,7 +84,7 @@
       },
       {
         "id": 8,
-        "label": "Work Language",
+        "label": "work_language",
         "description": "Language of the work",
         "type": "TEXT",
         "required": true,
@@ -93,7 +93,7 @@
       },
       {
         "id": 9,
-        "label": "Author Name",
+        "label": "author_name",
         "description": "Full name of the author",
         "type": "TEXT",
         "required": true,
@@ -102,7 +102,7 @@
       },
       {
         "id": 10,
-        "label": "Author Address",
+        "label": "author_address",
         "description": "Address of the author",
         "type": "TEXTAREA",
         "required": true,
@@ -111,7 +111,7 @@
       },
       {
         "id": 11,
-        "label": "Publication Status",
+        "label": "publication_status",
         "description": "Is the work published or unpublished?",
         "type": "SELECT",
         "required": true,
@@ -120,7 +120,7 @@
       },
       {
         "id": 12,
-        "label": "Publisher Details",
+        "label": "publisher_details",
         "description": "Name and address of the publisher",
         "type": "TEXTAREA",
         "required": false,
@@ -129,7 +129,7 @@
       },
       {
         "id": 13,
-        "label": "Year of First Publication",
+        "label": "publication_year",
         "description": "Year when the work was first published",
         "type": "NUMBER",
         "required": false,
@@ -138,7 +138,7 @@
       },
       {
         "id": 14,
-        "label": "Fee Payment Details",
+        "label": "fee_payment_details",
         "description": "Details of payment of registration fee",
         "type": "TEXT",
         "required": true,
@@ -147,7 +147,7 @@
       },
       {
         "id": 15,
-        "label": "Declaration",
+        "label": "declaration",
         "description": "I verify that particulars given in this form are true to the best of my knowledge",
         "type": "CHECKBOX",
         "required": true,
@@ -156,7 +156,7 @@
       },
       {
         "id": 16,
-        "label": "Work Sample",
+        "label": "work_sample",
         "description": "Upload a copy of the work for which registration is sought",
         "type": "FILE",
         "required": true,

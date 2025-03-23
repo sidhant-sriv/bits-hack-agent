@@ -20,7 +20,7 @@ embeddings = CohereEmbeddings(
 groq_api_key = os.environ.get("GROQ_API_KEY")
 
 
-def load_vectorstore_from_disk(persist_directory="chroma.db"):
+def load_vectorstore_from_disk(persist_directory="chromadb"):
     """
     Load a Chroma vectorstore from disk.
 
@@ -62,10 +62,14 @@ llm = ChatGroq(
 
 prompt_question = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
-    user question to a vectorstore or web search. Use the vectorstore for questions on copyright i.e Introduction to the Copyright Act, 1957, The Copyright (Amendment) Act, 2012, Reasons for Amendments, Digital Protection, Internet Service Provider (ISP) Liability, Statutory Licenses, Royalty Rights, Performer Rights, Copyright Societies, Exceptions for the Physically Disabled. You do not need to be stringent with the keywords 
+    user question to a vectorstore or web search. Use the vectorstore for questions on anything related to indian copyright i.e Introduction to the Copyright Act, 1957, The Copyright (Amendment) Act, 2012, Reasons for Amendments, Digital Protection, Internet Service Provider (ISP) Liability, Statutory Licenses, Royalty Rights, Performer Rights, Copyright Societies, Exceptions for the Physically Disabled. You do not need to be stringent with the keywords 
     in the question related to these topics. Otherwise, use web-search. Give a binary choice 'web_search' 
     or 'vectorstore' based on the question. Return the a JSON with a single key 'datasource' and 
-    no premable or explaination. Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+    no premable or explaination.
+    
+    Example queries that
+
+     Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["question"],
 )
 

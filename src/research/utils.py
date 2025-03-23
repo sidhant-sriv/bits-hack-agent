@@ -1,7 +1,12 @@
+import requests
 from langchain_community.vectorstores import Chroma
 from langchain_cohere import CohereEmbeddings
 from langchain_core.documents import Document
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def flatten_form_data(json_response):
@@ -14,11 +19,15 @@ def flatten_form_data(json_response):
     Returns:
         dict: Flattened form data structure
     """
-    data = (
-        json_response if isinstance(json_response, dict) else json.loads(json_response)
-    )
+    if isinstance(json_response, dict):
+        data = json_response
+    elif isinstance(json_response, list):
+        data = json_response[0] if json_response else {}
+    else:
+        data = json.loads(json_response)
 
     # Create flattened structure
+    data = data["data"]
     flattened_data = {
         "formId": data["data"]["formId"],
         "formTitle": data["data"]["title"],
@@ -73,8 +82,8 @@ def store_form_data(json_data):
     vectorstore = Chroma.from_documents(
         documents=documents,
         embedding=embedding_model,
-        collection_name="form-data",
-        persist_directory="chroma.db",
+        collection_name="form-struct-data",
+        persist_directory="chromadb",
     )
     vectorstore.persist()
 
@@ -95,8 +104,8 @@ def query_form_data(query_text, n_results=1):
     # Initialize the vector store
     vectorstore = Chroma(
         embedding_function=embedding_model,
-        collection_name="form-data",
-        persist_directory="chroma.db",
+        collection_name="form-struct-data",
+        persist_directory="chromadb",
     )
 
     # Search the vector store
@@ -133,3 +142,71 @@ def process_and_store_json_file(file_path):
         return result
     except Exception as e:
         return f"Error processing file: {str(e)}"
+
+
+BACKEND_URL = os.environ.get("BACKEND_URL")
+
+
+def get_user_profile(user_id):
+    """
+    Fetch user profile information from the backend API.
+
+    Args:
+        user_id: User ID to fetch profile for
+
+    Returns:
+        dict: User profile data or error message
+    """
+    try:
+        # Construct the full URL for the API request
+        url = f"{BACKEND_URL}/ml/profile/{user_id}"
+
+        # Set headers including any required authentication
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        # Make the API request
+        response = requests.get(url, headers=headers)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {
+                "error": True,
+                "message": f"Failed to fetch user profile: {response.status_code}",
+                "status_code": response.status_code,
+            }
+    except Exception as e:
+        return {
+            "error": True,
+            "message": f"Exception occurred: {str(e)}",
+        }
+
+
+def fill_form_with_user_data(form_info, user_data):
+    """
+    A general-purpose function that fills empty fields in a form with matching values
+    from user data, relying only on direct key matches.
+
+    Args:
+        form_info (dict): The form dictionary with possibly empty values
+        user_data (dict): The user data dictionary to extract values from
+
+    Returns:
+        dict: The updated form with filled values where possible
+    """
+    # Create a copy of the form to avoid modifying the original
+    updated_form = form_info.copy()
+
+    # For each key in the form
+    for key in updated_form:
+        # Check if the form field is empty (empty string)
+        if updated_form[key] == "":
+            # Check if there's a matching key in user_data
+            if key in user_data:
+                # Fill the form field with the user data value
+                updated_form[key] = user_data[key]
+
+    return updated_form

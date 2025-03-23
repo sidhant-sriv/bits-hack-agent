@@ -1,0 +1,208 @@
+{
+  "Applicant Name": {
+    "id": 1,
+    "description": "Full name of the applicant",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 200,
+      "minLength": 3
+    },
+    "order": 1,
+    "value": ""
+  },
+  "Applicant Address": {
+    "id": 2,
+    "description": "Complete address of the applicant",
+    "type": "TEXTAREA",
+    "required": true,
+    "validations": {
+      "maxLength": 500,
+      "minLength": 10
+    },
+    "order": 2,
+    "value": ""
+  },
+  "Applicant Nationality": {
+    "id": 3,
+    "description": "Nationality of the applicant",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 100,
+      "minLength": 2
+    },
+    "order": 3,
+    "value": ""
+  },
+  "Applicant Category": {
+    "id": 4,
+    "description": "Category of the applicant",
+    "type": "SELECT",
+    "required": true,
+    "validations": {
+      "options": [
+        "Individual",
+        "Business",
+        "Others"
+      ]
+    },
+    "order": 4,
+    "value": ""
+  },
+  "Work Title": {
+    "id": 5,
+    "description": "Title of the work for copyright registration",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 200,
+      "minLength": 1
+    },
+    "order": 5,
+    "value": ""
+  },
+  "Work Description": {
+    "id": 6,
+    "description": "Description of the work",
+    "type": "TEXTAREA",
+    "required": true,
+    "validations": {
+      "maxLength": 500,
+      "minLength": 10
+    },
+    "order": 6,
+    "value": ""
+  },
+  "Work Class": {
+    "id": 7,
+    "description": "Class of the work",
+    "type": "SELECT",
+    "required": true,
+    "validations": {
+      "options": [
+        "Literary",
+        "Dramatic",
+        "Musical",
+        "Artistic",
+        "Cinematograph Film",
+        "Sound Recording",
+        "Computer Software"
+      ]
+    },
+    "order": 7,
+    "value": ""
+  },
+  "Work Language": {
+    "id": 8,
+    "description": "Language of the work",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 50,
+      "minLength": 2
+    },
+    "order": 8,
+    "value": ""
+  },
+  "Author Name": {
+    "id": 9,
+    "description": "Full name of the author",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 200,
+      "minLength": 3
+    },
+    "order": 9,
+    "value": ""
+  },
+  "Author Address": {
+    "id": 10,
+    "description": "Address of the author",
+    "type": "TEXTAREA",
+    "required": true,
+    "validations": {
+      "maxLength": 500,
+      "minLength": 10
+    },
+    "order": 10,
+    "value": ""
+  },
+  "Publication Status": {
+    "id": 11,
+    "description": "Is the work published or unpublished?",
+    "type": "SELECT",
+    "required": true,
+    "validations": {
+      "options": [
+        "Published",
+        "Unpublished"
+      ]
+    },
+    "order": 11,
+    "value": ""
+  },
+  "Publisher Details": {
+    "id": 12,
+    "description": "Name and address of the publisher",
+    "type": "TEXTAREA",
+    "required": false,
+    "validations": {
+      "maxLength": 300,
+      "minLength": 0
+    },
+    "order": 12,
+    "value": ""
+  },
+  "Year of First Publication": {
+    "id": 13,
+    "description": "Year when the work was first published",
+    "type": "NUMBER",
+    "required": false,
+    "validations": {
+      "max": 2025,
+      "min": 1800
+    },
+    "order": 13,
+    "value": null
+  },
+  "Fee Payment Details": {
+    "id": 14,
+    "description": "Details of payment of registration fee",
+    "type": "TEXT",
+    "required": true,
+    "validations": {
+      "maxLength": 100,
+      "minLength": 5
+    },
+    "order": 14,
+    "value": ""
+  },
+  "Declaration": {
+    "id": 15,
+    "description": "I verify that particulars given in this form are true to the best of my knowledge",
+    "type": "CHECKBOX",
+    "required": true,
+    "validations": {},
+    "order": 15,
+    "value": false
+  },
+  "Work Sample": {
+    "id": 16,
+    "description": "Upload a copy of the work for which registration is sought",
+    "type": "FILE",
+    "required": true,
+    "validations": {
+      "maxSize": 10,
+      "fileTypes": [
+        "pdf",
+        "docx",
+        "jpg",
+        "png"
+      ]
+    },
+    "order": 16,
+    "value": null
+  }
+}

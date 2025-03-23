@@ -71,7 +71,6 @@ workflow.add_edge("get_form_struct", "merge_node")
 workflow.add_edge("merge_node", END)
 app_workflow = workflow.compile()
 
-print(app_workflow.invoke({"question": "Send my form for filing a copyright"}))
 
 # Create FastAPI app
 app = FastAPI(
@@ -89,11 +88,8 @@ class QueryRequest(BaseModel):
 
 class WorkflowResponse(BaseModel):
     generation: Optional[str] = None
-    documents: Optional[List[Dict[str, Any]]] = None
     form_struct: Optional[Dict[str, Any]] = None
-    intent: Optional[str] = None
-    web_search: Optional[str] = None
-    user_id: Optional[str] = None
+    user_id: Optional[int] = None
 
 
 @app.post("/query", response_model=WorkflowResponse)
@@ -127,26 +123,8 @@ async def execute_query(request: QueryRequest = Body(...)):
         # Add available fields from the result to the response
         if "generation" in result:
             response.generation = result["generation"]
-        if "documents" in result:
-            # Convert Document objects to dictionaries
-            docs = []
-            for doc in result["documents"]:
-                if hasattr(doc, "page_content"):
-                    docs.append(
-                        {
-                            "page_content": doc.page_content,
-                            "metadata": getattr(doc, "metadata", {}),
-                        }
-                    )
-                else:
-                    docs.append(doc)
-            response.documents = docs
         if "form_struct" in result:
             response.form_struct = result["form_struct"]
-        if "intent" in result:
-            response.intent = result["intent"]
-        if "web_search" in result:
-            response.web_search = result["web_search"]
         if "user_id" in result:
             response.user_id = result["user_id"]
         else:

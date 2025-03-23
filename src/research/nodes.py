@@ -1,5 +1,11 @@
+import json
 from langchain.schema import Document
-from utils import flatten_form_data, query_form_data
+from utils import (
+    fill_form_with_user_data,
+    flatten_form_data,
+    get_user_profile,
+    query_form_data,
+)
 from tools import (
     retriever,
     rag_chain,
@@ -218,7 +224,10 @@ def entry_data(state):
 
 def user_data_sql(state):
     # Get user data
-    user_data = {}
+    user_id = state["context"]
+    user_data = get_user_profile(user_id)
+    print("USER DATA\n\n")
+    print(user_data)
     return {"user_data": user_data}
 
 
@@ -227,18 +236,13 @@ def get_form_struct(state):
 
     # call the RAG function
     json_data = query_form_data(state["generation"])
-
-    # Handle the case when json_data is already a list
-    if isinstance(json_data, list):
-        # Convert list to appropriate structure or use directly if that's what you need
-        data = {"items": json_data}
-    else:
-        data = flatten_form_data(json_data)
-
+    data = flatten_form_data(json_data)
+    print("FORM STRUCT\n\n")
+    print(json.dumps(data))
     return {"form_struct": data}
 
 
 def merge_node(state):
     # Takes keys from user_data and adds it to form struct
-
-    return state
+    merged = fill_form_with_user_data(state["form_struct"], state["user_data"])
+    return {"form_struct": merged}
