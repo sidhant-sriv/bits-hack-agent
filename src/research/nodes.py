@@ -1,4 +1,5 @@
 from langchain.schema import Document
+from utils import flatten_form_data, query_form_data
 from tools import (
     retriever,
     rag_chain,
@@ -31,7 +32,6 @@ def retrieve(state):
     return {"documents": documents, "question": question}
 
 
-#
 def generate(state):
     """
     Generate answer using RAG on retrieved documents
@@ -225,11 +225,20 @@ def user_data_sql(state):
 def get_form_struct(state):
     # form data from RAG
 
-    form_struct = {}
-    return {"form_struct": form_struct}
+    # call the RAG function
+    json_data = query_form_data(state["generation"])
+
+    # Handle the case when json_data is already a list
+    if isinstance(json_data, list):
+        # Convert list to appropriate structure or use directly if that's what you need
+        data = {"items": json_data}
+    else:
+        data = flatten_form_data(json_data)
+
+    return {"form_struct": data}
 
 
 def merge_node(state):
     # Takes keys from user_data and adds it to form struct
-    new_form_stuct = {"name": "sidhant"}
-    return {"form_struct": new_form_stuct}
+
+    return state
