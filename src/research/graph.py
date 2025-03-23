@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import Dict, List, Any, Optional
+from pydantic_core import core_schema
 import uvicorn
 from langgraph.graph import END, StateGraph
 from state import GraphState
+from fastapi.middleware.cors import CORSMiddleware
 
 # Import directly from the same file
 from nodes import (
@@ -20,6 +22,8 @@ from nodes import (
     web_search,
     entry_data,
 )
+
+
 
 # Initialize the workflow
 workflow = StateGraph(GraphState)
@@ -79,6 +83,15 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
+
 
 class QueryRequest(BaseModel):
     question: str
@@ -115,7 +128,7 @@ async def execute_query(request: QueryRequest = Body(...)):
         initial_state = {"question": request.question, "context": request.user_id}
 
         # Execute the workflow
-        result = await app_workflow.ainvoke(initial_state)
+        result = await app_workflow.ainvoke(initial_state, {"recursion_limit": 10})
 
         # Parse the output for the response
         response = WorkflowResponse()

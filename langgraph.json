@@ -1,6 +1,6 @@
 {
     "dependencies": ["."],
     "graphs": {
-      "research": "./src/research/graph.py:app"
+      "research": "./src/research/graph.py:app_workflow"
     }
 }

@@ -1,4 +1,4 @@
-from groq import Groq
+from groq import BaseModel, Groq
 from langchain_groq import ChatGroq
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -20,7 +20,7 @@ embeddings = CohereEmbeddings(
 groq_api_key = os.environ.get("GROQ_API_KEY")
 
 
-def load_vectorstore_from_disk(persist_directory="chromadb"):
+def load_vectorstore_from_disk(persist_directory="vector"):
     """
     Load a Chroma vectorstore from disk.
 
@@ -32,7 +32,9 @@ def load_vectorstore_from_disk(persist_directory="chromadb"):
     """
     try:
         vectorstore = Chroma(
-            persist_directory=persist_directory, embedding_function=embeddings
+            persist_directory=persist_directory,
+            embedding_function=embeddings,
+            collection_name="full-context",
         )
         return vectorstore
     except Exception as e:
@@ -48,15 +50,10 @@ else:
     print("Failed to load vectorstore, retriever not initialized")
     retriever = None
 
-router_llm = ChatGroq(
-    temperature=0,
-    model="llama3-8b-8192",
-    api_key=SecretStr(groq_api_key) if groq_api_key else None,
-)
 
 llm = ChatGroq(
     temperature=0,
-    model="llama-3.3-70b-specdec",
+    model="llama3-70b-8192",
     api_key=SecretStr(groq_api_key) if groq_api_key else None,
 )
 
@@ -73,11 +70,11 @@ prompt_question = PromptTemplate(
     input_variables=["question"],
 )
 
-question_router = prompt_question | router_llm | JsonOutputParser()
+question_router = prompt_question | llm | JsonOutputParser()
 prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant for question-answering tasks. 
     Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. 
-    Try to give as much information as possible.
+    Try to give it in 2-3 sentences.
     c <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question} 
     Context: {context} 
@@ -134,19 +131,27 @@ prompt = PromptTemplate(
     input_variables=["generation", "question"],
 )
 answer_grader = prompt | llm | JsonOutputParser()
+from langchain_core.pydantic_v1 import BaseModel, Field
+
+
+class IntentOutput(BaseModel):
+    intent: str = Field(description="Either 'command' or 'question_answering'")
+
 
 prompt_intent = PromptTemplate(
     template="""
     <|begin_of_text|><|start_header_id|>system<|end_header_id|>You are a classifier assessing whether the query given is just asking a
     question based on the context or if it is giving a command. Give either 'command' or 'question_answering' to indicate whether
-    the given query by the user. Provide the intent output in a single key 'intent' and no preamble or explanation.  <|eot_id|><|start_header_id|>user<|end_header_id|> Here is the question/query:
+    the given query by the user is a command or a question. 
+    
+    Format your response as a JSON object with a single key 'intent'. Do not include any other text.
+     <|eot_id|><|start_header_id|>user<|end_header_id|> Here is the question/query:
     \n\n
     {question}
-    \n\n
+    \n\n <|eot_id|><|start_header_id|>assistant<|end_header_id|>
     """,
     input_variables=["question"],
 )
 
-intent_classifier = prompt_intent | llm | JsonOutputParser()
-
+intent_classifier = prompt_intent | llm | JsonOutputParser(pydantic_object=IntentOutput)
 web_search_tool = TavilySearchResults(k=3)

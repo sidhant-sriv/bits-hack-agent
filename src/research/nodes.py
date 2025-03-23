@@ -28,12 +28,11 @@ def retrieve(state):
     Returns:
         state (dict): New key added to state, documents, that contains retrieved documents
     """
-    question = state["question"]
+    print("Running retrieve function...")
+    question: str = state.get("question", "")
     # Initialize documents as empty list
-    documents = []
-    # Retrieval
-    if retriever is not None:
-        documents = retriever.invoke(question)
+
+    documents = retriever.invoke(question)
 
     return {"documents": documents, "question": question}
 
@@ -48,6 +47,7 @@ def generate(state):
     Returns:
         state (dict): New key added to state, generation, that contains LLM generation
     """
+    print("Running generate function...")
     question = state["question"]
     documents = state["documents"]
 
@@ -56,7 +56,6 @@ def generate(state):
     return {"documents": documents, "question": question, "generation": generation}
 
 
-#
 def grade_documents(state):
     """
     Determines whether the retrieved documents are relevant to the question
@@ -68,7 +67,7 @@ def grade_documents(state):
     Returns:
         state (dict): Filtered out irrelevant documents and updated web_search state
     """
-
+    print("Running grade_documents function...")
     print("---CHECK DOCUMENT RELEVANCE TO QUESTION---")
     question = state["question"]
     documents = state["documents"]
@@ -91,7 +90,6 @@ def grade_documents(state):
     return {"documents": filtered_docs, "question": question, "web_search": web_search}
 
 
-#
 def web_search(state):
     """
     Web search based based on the question
@@ -102,7 +100,7 @@ def web_search(state):
     Returns:
         state (dict): Appended web results to documents
     """
-
+    print("Running web_search function...")
     question = state["question"]
     # Initialize documents as empty list if it doesn't exist
     documents = state.get("documents", [])
@@ -112,9 +110,9 @@ def web_search(state):
     web_results = "\n".join([d["content"] for d in docs])
     web_results = Document(page_content=web_results)
     if documents:
-        documents.append(web_results)
+        documents.append(web_results.page_content)
     else:
-        documents = [web_results]
+        documents = [web_results.page_content]
     return {"documents": documents, "question": question}
 
 
@@ -128,7 +126,7 @@ def route_question(state):
     Returns:
         str: Next node to call
     """
-
+    print("Running route_question function...")
     question = state["question"]
     print(question)
     source = question_router.invoke({"question": question})
@@ -141,6 +139,7 @@ def route_question(state):
 
 
 def route_intent(state):
+    print("Running route_intent function...")
     question = state["question"]
     classification = intent_classifier.invoke({"question": question})
     return classification
@@ -157,7 +156,7 @@ def decide_to_generate(state):
     Returns:
         str: Binary decision for next node to call
     """
-
+    print("Running decide_to_generate function...")
     question = state["question"]
     web_search = state["web_search"]
     filtered_documents = state["documents"]
@@ -183,7 +182,7 @@ def grade_generation_v_documents_and_question(state):
     Returns:
         str: Decision for next node to call
     """
-
+    print("Running grade_generation_v_documents_and_question function...")
     question = state["question"]
     documents = state["documents"]
     generation = state["generation"]
@@ -216,6 +215,7 @@ def entry_data(state):
     Returns:
         state (dict): The unchanged state
     """
+    print("Running entry_data function...")
     print(
         "This goes as an entry for parallel action of getting user data and form data"
     )
@@ -223,6 +223,7 @@ def entry_data(state):
 
 
 def user_data_sql(state):
+    print("Running user_data_sql function...")
     # Get user data
     user_id = state["context"]
     user_data = get_user_profile(user_id)
@@ -232,6 +233,7 @@ def user_data_sql(state):
 
 
 def get_form_struct(state):
+    print("Running get_form_struct function...")
     # form data from RAG
 
     # call the RAG function
@@ -243,6 +245,7 @@ def get_form_struct(state):
 
 
 def merge_node(state):
+    print("Running merge_node function...")
     # Takes keys from user_data and adds it to form struct
     merged = fill_form_with_user_data(state["form_struct"], state["user_data"])
     return {"form_struct": merged}

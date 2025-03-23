@@ -83,7 +83,7 @@ def store_form_data(json_data):
         documents=documents,
         embedding=embedding_model,
         collection_name="form-struct-data",
-        persist_directory="chromadb",
+        persist_directory="vector",
     )
     vectorstore.persist()
 
@@ -105,7 +105,7 @@ def query_form_data(query_text, n_results=1):
     vectorstore = Chroma(
         embedding_function=embedding_model,
         collection_name="form-struct-data",
-        persist_directory="chromadb",
+        persist_directory="vector",
     )
 
     # Search the vector store
