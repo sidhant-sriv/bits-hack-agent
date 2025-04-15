@@ -75,6 +75,7 @@ prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant for question-answering tasks. 
     Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. 
     Try to give it in 2-3 sentences.
+    Do not comment on the context.
     c <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question} 
     Context: {context} 

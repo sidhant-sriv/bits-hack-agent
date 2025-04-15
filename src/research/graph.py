@@ -151,9 +151,43 @@ async def execute_query(request: QueryRequest = Body(...)):
         )
 
 
+@app.post("/plain")
+async def plain_response(request: QueryRequest = Body(...)):
+    """
+    Execute a query and return a plain text response.
+    
+    This endpoint processes the user's question through the workflow
+    and returns just the generated text without the structured response format.
+    
+    Required parameters:
+    - question: The user's question or command
+    - user_id: The unique identifier for the user
+    
+    Optional parameters:
+    - context: Additional context information
+    """
+    try:
+        # Initialize the state with the question and user_id
+        initial_state = {"question": request.question, "context": request.user_id}
+
+        # Execute the workflow
+        result = await app_workflow.ainvoke(initial_state, {"recursion_limit": 10})
+
+        # Return just the generated text
+        if "generation" in result and result["generation"]:
+            return result["generation"]
+        else:
+            return "No response was generated for your query."
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Workflow execution failed: {str(e)}"
+        )
+
 @app.get("/")
 async def root():
     """Health check endpoint"""
+
     return {"status": "API is running", "version": "1.0.0"}
 
 
@@ -170,4 +204,7 @@ def custom_user_data_sql(state):
 
 
 if __name__ == "__main__":
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
+# res = app_workflow.invoke({"question": "List out some laws in copyright", "user_id": 123})
+# print("\n\n\n\n\n\n\n" + 16*"-" + "\n\n\n\n\n\n\n" + res["generation"])

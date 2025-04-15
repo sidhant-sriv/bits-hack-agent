@@ -1,8 +1,8 @@
 from typing_extensions import TypedDict
 from typing import List, Dict, Any
+from langgraph.graph import MessagesState
 
-
-class GraphState(TypedDict):
+class GraphState(MessagesState):
     question: str
     generation: str
     web_search: str

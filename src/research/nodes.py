@@ -225,8 +225,9 @@ def entry_data(state):
 def user_data_sql(state):
     print("Running user_data_sql function...")
     # Get user data
-    user_id = state["context"]
-    user_data = get_user_profile(user_id)
+    # user_id = state["context"]
+
+    user_data = "get_user_profile(user_id)"
     print("USER DATA\n\n")
     print(user_data)
     return {"user_data": user_data}
@@ -248,4 +249,4 @@ def merge_node(state):
     print("Running merge_node function...")
     # Takes keys from user_data and adds it to form struct
     merged = fill_form_with_user_data(state["form_struct"], state["user_data"])
-    return {"form_struct": merged}
+    return {"form_struct": state["form_struct"]}

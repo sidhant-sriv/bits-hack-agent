@@ -1,0 +1,63 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local development configurations
+*.log
+local_settings.py
+
+# Documentation
+docs/
+*.md
